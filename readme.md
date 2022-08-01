@@ -12,8 +12,8 @@
 - Docker giúp cho việc đóng gói các ứng dụng một các dễ dàng (Thay vì cài Git hay maven, python.. chúng ta chỉ cần cài docker )
 ## Tính chất của Docker
 - Immutable: bất biến
-- Lightweight
-- Stateless
+- Lightweight: Kích thước nhẹ
+- Stateless: kém ổn định
 ## Các lệnh cơ bản của Docker
 1. Cú pháp 
 - Docker < component> < command>
@@ -99,6 +99,8 @@ docker logs  -f < container_id>
 - + docker-compose stop < service_name>
 - Tắt service
 - + docker-compose down
+
+## Tham khảo tại https://www.youtube.com/watch?v=yWCse8S2qsM
 
 
 
