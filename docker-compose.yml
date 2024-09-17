@@ -1,6 +1,5 @@
-version: '3'
+version: '3.0'
 services:
-
   mytb:
     restart: always
     image: "thingsboard/tb-postgres"
@@ -11,26 +10,40 @@ services:
       - "5683-5688:5683-5688/udp"
     environment:
       TB_QUEUE_TYPE: in-memory
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/thingsboard
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres_password
     volumes:
-      - mytb-data:/data
-      - mytb-logs:/var/log/thingsboard
-volumes:
-  mytb-data:
-  mytb-logs:
+      - ~/.mytb-data:/data
+      - ~/.mytb-logs:/var/log/thingsboard
+    depends_on:
+      - postgres
+    networks:
+      - my-network
 
-  
-  db:
-    image: postgres
-    restart: always
+  postgres:
+    image: postgres:13
     environment:
-      POSTGRES_PASSWORD: example
+      POSTGRES_DB: thingsboard
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres_password
+    volumes:
+      - ~/.postgres-data:/var/lib/postgresql/data
+    networks:
+      - my-network
 
-  adminer:
-    image: adminer
-    restart: always
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
     ports:
-      - 8081:8080
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - my-network
 
-
-
-  
+networks:
+  my-network:
+    driver: bridge
